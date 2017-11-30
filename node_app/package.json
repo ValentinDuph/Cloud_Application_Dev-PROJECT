@@ -1,7 +1,24 @@
 {
-    "name": "node_app",
-    "version": "0.1.0",
-    "dependencies": {
-        "express": "^4.16.2"
-    }
+  "name": "node_app",
+  "version": "0.1.0",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongodb": "^2.2.33"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akiraquenot/Cloud_Application_Dev-PROJECT.git"
+  },
+  "author": "Akira Quenot",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akiraquenot/Cloud_Application_Dev-PROJECT/issues"
+  },
+  "homepage": "https://github.com/akiraquenot/Cloud_Application_Dev-PROJECT#readme",
+  "description": ""
 }
