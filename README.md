@@ -27,5 +27,5 @@ mongod
 
 3. Run Node server
 ```
-node server.js
+node node_app/server.js
 ```
