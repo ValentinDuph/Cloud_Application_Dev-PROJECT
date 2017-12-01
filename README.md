@@ -15,17 +15,25 @@ The aim of this project is to Visualize Data using simple and complex queries.
 
 ## Installation
 
-1. Install project dependencies using npm
+1. Clone repository
 ```
+git clone https://github.com/akiraquenot/Cloud_Application_Dev-PROJECT
+```
+
+2. Install project dependencies using npm
+```
+cd Cloud_Application_Dev-PROJECT/node_app
 npm install dependencies
 ```
 
-2. Run mongodb server
+3. Run mongodb server in a new Terminal
 ```
 mongod
 ```
 
-3. Run Node server
+4. Run Node server
 ```
 node node_app/server.js
 ```
+
+5. Go to http://localhost:8080/ to display index.html
