@@ -2,6 +2,17 @@
 
 ##### Cloud_Application_Dev-PROJEC
 
+## Introduction
+This repository contains a school project.
+The aim of this project is to Visualize Data using simple and complex queries.
+<b>[SQL Database : Airline]</b>
+
+## Technologies
+
+1. NodeJS
+2. MongoDB
+3. D3js
+
 ## Installation
 
 1. Install project dependencies using npm
