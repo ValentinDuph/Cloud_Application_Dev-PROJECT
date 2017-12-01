@@ -2,7 +2,7 @@
 var http = require('http');
 var url = require('url');
 var querystring = require('querystring');
-var fct = require('functions'); // Fait appel à functions_lib.js (dans le dossier functions)
+var fct = require('./functions.js'); // Fait appel à functions_lib.js (dans le dossier functions)
 var express = require('express');
 var path = require('path');
 var mongodb = require('mongodb');
