@@ -1,0 +1,82 @@
+{
+  "_from": "datamaps@^0.5.8",
+  "_id": "datamaps@0.5.8",
+  "_inBundle": false,
+  "_integrity": "sha1-06uehnWVKb/7mOgrSkO1Jn9J0YM=",
+  "_location": "/datamaps",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "datamaps@^0.5.8",
+    "name": "datamaps",
+    "escapedName": "datamaps",
+    "rawSpec": "^0.5.8",
+    "saveSpec": null,
+    "fetchSpec": "^0.5.8"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/datamaps/-/datamaps-0.5.8.tgz",
+  "_shasum": "d3ab9e86759529bffb98e82b4a43b5267f49d183",
+  "_spec": "datamaps@^0.5.8",
+  "_where": "/Users/akiraquenot/Desktop/ESILV/S09/Développement d'applications Cloud/Projet/Cloud_Application_Dev-PROJECT/node_app",
+  "author": {
+    "name": "Mark DiMarco",
+    "email": "markmarkoh@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/markmarkoh/datamaps/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Enrico Berti",
+      "url": "https://github.com/enricoberti"
+    },
+    {
+      "name": "Matteo Guarnerio",
+      "url": "http://matteoguarnerio.com"
+    },
+    {
+      "name": "Adrian Jones",
+      "url": "https://github.com/adrianbj"
+    },
+    {
+      "name": "Dave Long",
+      "email": "dave@davejlong.com",
+      "url": "https://github.com/davejlong"
+    }
+  ],
+  "dependencies": {
+    "d3": "^3.5.6",
+    "topojson": "^1.6.19"
+  },
+  "deprecated": false,
+  "description": "datamaps with d3.js",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-jasmine": "~0.5.2",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-replace": "~0.4.4",
+    "grunt-sync-pkg": "^0.1.2",
+    "grunt-text-replace": "~0.3.6"
+  },
+  "homepage": "https://github.com/markmarkoh/datamaps#readme",
+  "license": "MIT",
+  "main": "dist/datamaps.all.js",
+  "name": "datamaps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markmarkoh/datamaps.git"
+  },
+  "scripts": {
+    "test": "grunt jasmine"
+  },
+  "version": "0.5.8"
+}

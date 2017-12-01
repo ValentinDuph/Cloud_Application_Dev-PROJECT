@@ -28,8 +28,8 @@ app.get('/findOne', function(req,res) {
   });
 })
 
-app.get('/test', function (req, res) {
-  res.sendFile( __dirname + "/www/index0.html" );
+app.get('/analyst', function (req, res) {
+  res.sendFile( __dirname + "/www/map.html" );
 })
 
 var server = app.listen(8080, function () {
