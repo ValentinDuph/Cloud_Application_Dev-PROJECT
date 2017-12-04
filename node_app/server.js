@@ -29,14 +29,26 @@ app.get('/findOne', function(req,res) {
   });
 })
 app.get('/flights_arc', function(req, res) {
+  var from = new Date(req.query.from);
+  var to = new Date (req.query.to);
+  console.log(from + ' --> ' + to)
   mongoClient.connect(url_db, function(err, db) {
-    db.collection(flights_collection).aggregate([
-  		{$project: {
-        "origin" : "$OriginState",
-  			"destination" : "$DestState",
-  			FlightDate : 1
-      }}
-    ]).toArray(function(err, result) {
+    db.collection(flights_collection).aggregate(
+    	[
+    		{
+    			$match: {
+    			  FlightDate: {$gte: from, $lt: to}
+    			}
+    		},
+    		{
+    			$project: {
+    			    "origin" : "$OriginState",
+    			    "destination" : "$DestState",
+    			    FlightDate : 1
+    			}
+    		},
+    	]
+    ).toArray(function(err, result) {
       if (err) throw err;
       res.setHeader('Content-Type', 'application/json');
       res.send(JSON.stringify(result));
