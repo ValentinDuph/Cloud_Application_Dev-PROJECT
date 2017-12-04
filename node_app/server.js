@@ -11,6 +11,7 @@ var mongodb = require('mongodb');
 const app = express();
 const mongoClient = mongodb.MongoClient;
 const url_db = "mongodb://localhost:27017/Airline";
+const flights_collection = "On_Time_On_Time_Performance_2016_1"
 
 // Store all HTML files in view folder.
 app.use(express.static('www'));
@@ -19,7 +20,35 @@ app.use(express.static('www'));
 app.get('/findOne', function(req,res) {
   mongoClient.connect(url_db, function(err, db) {
     if (err) throw err;
-    db.collection("On_Time_On_Time_Performance_2016_1").findOne({}, function(err, result) {
+    db.collection(flights_collection).findOne({}, function(err, result) {
+      if (err) throw err;
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(result));
+      db.close();
+    });
+  });
+})
+app.get('/flights_arc', function(req, res) {
+  mongoClient.connect(url_db, function(err, db) {
+    db.collection(flights_collection).aggregate([
+  		{$project: {
+        "origin" : "$OriginState",
+  			"destination" : "$DestState",
+  			FlightDate : 1
+      }}
+    ]).toArray(function(err, result) {
+      if (err) throw err;
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(result));
+      db.close();
+    });
+  });
+})
+
+app.get('/findAll', function(req,res) {
+  mongoClient.connect(url_db, function(err, db) {
+    if (err) throw err;
+    db.collection(flights_collection).find({}).toArray(function(err, result) {
       if (err) throw err;
       res.setHeader('Content-Type', 'application/json');
       res.send(JSON.stringify(result));
@@ -29,7 +58,7 @@ app.get('/findOne', function(req,res) {
 })
 
 app.get('/analyst', function (req, res) {
-  res.sendFile( __dirname + "/www/map.html" );
+  res.sendFile( __dirname + "/www/generic.html" );
 })
 
 var server = app.listen(8080, function () {

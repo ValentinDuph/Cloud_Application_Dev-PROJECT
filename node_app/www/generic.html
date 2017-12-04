@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<!--
+	Theory by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>Analyst</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="subpage">
+
+		<!-- Header -->
+			<header id="header">
+				<div class="inner">
+					<a href="index.html" class="logo">Analyst Interface</a>
+					<nav id="nav">
+						<a href="index.html">Home</a>
+						<a href="generic.html">Generic</a>
+						<a href="elements.html">Elements</a>
+					</nav>
+					<a href="#navPanel" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+				</div>
+			</header>
+
+		<div class="inner">
+					<br />
+					<header class="align-center">
+						<h2>World Flights Map</h2>
+						<p>Displaying all flights between 2 dates</p>
+					</header>
+					<script src="http://d3js.org/d3.v3.min.js"></script>
+					<script src="http://d3js.org/topojson.v1.min.js"></script>
+					<script src="js/datamaps/dist/datamaps.usa.min.js"></script>
+					<div id="container" style="position: float; width: 100%; height: 550px;"></div>
+					<script>
+						var map = new Datamap({
+						  element: document.getElementById("container"),
+						  scope: 'usa',
+						  fills: {
+						    defaultFill: "#323f61",
+						    win: '#0fa0fa'
+						  },
+						  data: {
+						    'TX': { fillKey: 'win' },
+						    'FL': { fillKey: 'win' },
+						    'NC': { fillKey: 'win' },
+						    'CA': { fillKey: 'win' },
+						    'NY': { fillKey: 'win' },
+						    'CO': { fillKey: 'win' }
+						  }
+						});
+						d3.json('/flights_arc', function(json_data){
+							// Arcs coordinates can be specified explicitly with latitude/longtitude,
+							// or just the geographic center of the state/country.
+							map.arc(json_data);
+						})
+						/*
+						[{
+							_id : ''
+							origin : '',
+							destination : '',
+							date : '',
+						},
+						{
+							//...
+						}]
+						*/
+					</script>
+					</div>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+					<div class="flex">
+						<div class="copyright">
+							&copy; Untitled. Design: <a href="https://templated.co">TEMPLATED</a>. Images: <a href="https://unsplash.com">Unsplash</a>.
+						</div>
+						<ul class="icons">
+							<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon fa-linkedin"><span class="label">linkedIn</span></a></li>
+							<li><a href="#" class="icon fa-pinterest-p"><span class="label">Pinterest</span></a></li>
+							<li><a href="#" class="icon fa-vimeo"><span class="label">Vimeo</span></a></li>
+						</ul>
+					</div>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
