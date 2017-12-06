@@ -49,7 +49,7 @@
 							var from_date = document.getElementById("from").value;
 							var to_date = document.getElementById("to").value;
 							if((from_date && to_date) != '') {
-								var json_url = '/flights_arc?from=' + from_date + '&to=' + to_date;
+								var json_url = '/db_data?q=flights_arc&from=' + from_date + '&to=' + to_date;
 								console.log(json_url);
 								d3.json(json_url, function(json_data) {
 									// Arcs coordinates can be specified explicitly with latitude/longtitude,
