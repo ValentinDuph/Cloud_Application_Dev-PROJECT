@@ -30,47 +30,56 @@ var server = app.listen(8080, function () {
 app.use(express.static('www'));
 
 app.get('/standard', function (req, res) {
-  res.sendFile( path_app_analyste + "map.html" );
+  res.sendFile( path_app_standard + "" );
 })
 app.get('/analyst', function (req, res) {
   res.sendFile( path_app_analyste + "map.html" );
 })
 app.get('/admin', function (req, res) {
-  res.sendFile( path_app_analyste + "map.html" );
+  res.sendFile( path_app_administrateur + "" );
+})
+
+app.get('/db_data', function(req,res) {
+  var query_type = req.query.q;
+
+  switch(query_type) {
+    case 'flights_arc' :
+      var from = new Date(req.query.from);
+      var to = new Date (req.query.to);
+      console.log(from + ' --> ' + to);
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate(
+          [
+            {
+              $match: {
+                FlightDate: {$gte: from, $lte: to}
+              }
+            },
+            {
+              $project: {
+                  "origin" : "$OriginState",
+                  "destination" : "$DestState",
+                  FlightDate : 1
+              }
+            },
+          ]
+        ).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+          db.close();
+        });
+      });
+      break;
+    default:
+    break;
+  }
 })
 
 app.get('/findOne', function(req,res) {
   mongoClient.connect(url_db, function(err, db) {
     if (err) throw err;
     db.collection(flights_collection).findOne({}, function(err, result) {
-      if (err) throw err;
-      res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(result));
-      db.close();
-    });
-  });
-})
-app.get('/flights_arc', function(req, res) {
-  var from = new Date(req.query.from);
-  var to = new Date (req.query.to);
-  console.log(from + ' --> ' + to);
-  mongoClient.connect(url_db, function(err, db) {
-    db.collection(flights_collection).aggregate(
-    	[
-    		{
-    			$match: {
-    			  FlightDate: {$gte: from, $lte: to}
-    			}
-    		},
-    		{
-    			$project: {
-    			    "origin" : "$OriginState",
-    			    "destination" : "$DestState",
-    			    FlightDate : 1
-    			}
-    		},
-    	]
-    ).toArray(function(err, result) {
       if (err) throw err;
       res.setHeader('Content-Type', 'application/json');
       res.send(JSON.stringify(result));
