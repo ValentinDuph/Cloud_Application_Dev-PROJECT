@@ -31,13 +31,13 @@ app.get('/findOne', function(req,res) {
 app.get('/flights_arc', function(req, res) {
   var from = new Date(req.query.from);
   var to = new Date (req.query.to);
-  console.log(from + ' --> ' + to)
+  console.log(from + ' --> ' + to);
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate(
     	[
     		{
     			$match: {
-    			  FlightDate: {$gte: from, $lt: to}
+    			  FlightDate: {$gte: from, $lte: to}
     			}
     		},
     		{
