@@ -13,9 +13,31 @@ const mongoClient = mongodb.MongoClient;
 const url_db = "mongodb://localhost:27017/Airline";
 const flights_collection = "On_Time_On_Time_Performance_2016_1"
 
+//PATHS
+const path_app_standard = __dirname + "/www/App_Standard/";
+const path_app_analyste = __dirname + "/www/App_Analyste/";
+const path_app_administrateur = __dirname + "/www/App_Administrateur/";;
+
+var server = app.listen(8080, function () {
+  var host = server.address().address
+  var port = server.address().port
+
+  console.log("Example app listening at http://%s:%s", host, port);
+  fct.direBonjour();
+})
+
 // Store all HTML files in view folder.
 app.use(express.static('www'));
 
+app.get('/standard', function (req, res) {
+  res.sendFile( path_app_analyste + "map.html" );
+})
+app.get('/analyst', function (req, res) {
+  res.sendFile( path_app_analyste + "map.html" );
+})
+app.get('/admin', function (req, res) {
+  res.sendFile( path_app_analyste + "map.html" );
+})
 
 app.get('/findOne', function(req,res) {
   mongoClient.connect(url_db, function(err, db) {
@@ -67,18 +89,6 @@ app.get('/findAll', function(req,res) {
       db.close();
     });
   });
-})
-
-app.get('/analyst', function (req, res) {
-  res.sendFile( __dirname + "/www/generic.html" );
-})
-
-var server = app.listen(8080, function () {
-  var host = server.address().address
-  var port = server.address().port
-
-  console.log("Example app listening at http://%s:%s", host, port);
-  fct.direBonjour();
 })
 
 server.on('close', function() { // On écoute l'évènement close
