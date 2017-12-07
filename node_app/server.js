@@ -46,12 +46,16 @@ app.get('/db_data', function(req,res) {
     case 'flights_arc' :
       var from = new Date(req.query.from);
       var to = new Date (req.query.to);
+      var o_airport = req.query.o_airport;
+
+      console.log(o_airport);
       console.log(from + ' --> ' + to);
       mongoClient.connect(url_db, function(err, db) {
         db.collection(flights_collection).aggregate(
           [
             {
               $match: {
+                OriginCityName : o_airport,
                 FlightDate: {$gte: from, $lte: to}
               }
             },
@@ -71,8 +75,25 @@ app.get('/db_data', function(req,res) {
         });
       });
       break;
+    case 'airports' :
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate(
+          [
+            {
+              $group:{
+                _id:'$OriginCityName'
+              }
+            }
+          ]).toArray(function(err, result) {
+            if (err) throw err;
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(result));
+            db.close();
+          });
+      });
+      break;
     default:
-    break;
+      break;
   }
 })
 
