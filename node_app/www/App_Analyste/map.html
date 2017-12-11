@@ -9,109 +9,215 @@
 		<title>Analyst</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/style.css">
 	</head>
-	<body class="subpage" onload="getAirportList()">
+	<body class="subpage" onload="onload()">
 
 		<!-- Header -->
-			<header id="header">
-				<div class="inner">
-					<a href="index.html" class="logo">Analyst Interface</a>
-					<nav id="nav">
-						<a href="index.html">&#xf015; Home</a>
-					</nav>
-					<a href="#navPanel" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+		<header id="header">
+			<div class="inner">
+				<a href="index.html" class="logo">Analyst Interface</a>
+				<nav id="nav">
+					<a href="index.html">&#xf015; Home</a>
+				</nav>
+				<a href="#navPanel" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+			</div>
+		</header>
+		<br>
+		<div class="container-fluid">
+			<div class="row" style="background:#2c3e50; border-top-right-radius: 25px; border-bottom-right-radius: 25px;" onclick="hide_container(1)">
+				<div class="col-11">
+					<header class="align-center">
+						<h2>Percentage of Departure Delay/Aiport</h2>
+						<p>Percentage of delay on departure (more than 15 min) for each airport</p>
+					</header>
 				</div>
-			</header>
-
-		<div class="inner">
-					<br />
+				<div class="col-1" id="icon1">
+					<i class="fas fa-angle-down" style="height:100%; font-size: 250%; color : white"></i>
+				</div>
+			</div>
+			<br>
+			<div class="row" id = "percentage-container">
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row" style="background:#2c3e50; border-top-right-radius: 25px; border-bottom-right-radius: 25px;" onclick="hide_container(2)">
+				<div class="col-11">
 					<header class="align-center">
 						<h2>World Flights Map</h2>
 						<p>Displaying all flights between 2 dates</p>
 					</header>
-					<script src="https://use.fontawesome.com/a38786568f.js"></script>
-					<script src="http://d3js.org/d3.v3.min.js"></script>
-					<script src="http://d3js.org/topojson.v1.min.js"></script>
-					<script src="js/datamaps/dist/datamaps.usa.min.js"></script>
-					<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-					<form style = "position : float; float: left; width : 200px">
-						<label for="originAiports">Origin Airport : </label>
-						<select class="originAiports" id = "originAiports" name="originAiports" onchange="displayFlights()">
-							<option disabled selected>Choose origin airport ...</option>
-						</select>
-						<br />
-						<br />
-						<label for="from">From : </label>
-						<input id = "from" type="date" name="from" onchange="displayFlights()" value="2016-01-01" min="2016-01-01" max="2016-01-31"/>
-						<br />
-						<br />
-						<label for="to">To : </label>
-						<input id = "to" type="date" name="to" onchange="displayFlights()" value="2016-01-31" min="2016-01-01" max="2016-01-31"/>
-					</form>
-					<div id="container" style="position: float; float: right; width: 80%; height: 550px;"></div>
-					<script>
-						function getAirportList(){
-							var airports = new Array();
-							$.getJSON('db_data?q=airports', function(data) {
-							    var list = document.getElementById("originAiports");
-									for (item of data) {
-										var option = document.createElement("option");
-										option.text = item._id;
-										option.value = item._id;
-										list.appendChild(option);
-									}
-							});
-						}
-						function displayFlights() {
-							var o_airport = document.getElementById("originAiports").value;
-							var from_date = document.getElementById("from").value;
-							var to_date = document.getElementById("to").value;
-							if((o_airport && from_date && to_date) != '') {
-								var json_url = '/db_data?q=flights_arc&o_airport=' + o_airport + '&from=' + from_date + '&to=' + to_date;
-								console.log(json_url);
-								d3.json(json_url, function(json_data) {
-									// Arcs coordinates can be specified explicitly with latitude/longtitude,
-									// or just the geographic center of the state/country.
-									map.arc(json_data);
-								});
-							}
-						}
-
-						var map = new Datamap({
-						  element: document.getElementById("container"),
-						  scope: 'usa',
-						  fills: {
-						    defaultFill: "#323f61",
-						    win: '#0fa0fa'
-						  },
-						  data: {
-						    'TX': { fillKey: 'win' },
-						    'FL': { fillKey: 'win' },
-						    'NC': { fillKey: 'win' },
-						    'CA': { fillKey: 'win' },
-						    'NY': { fillKey: 'win' },
-						    'CO': { fillKey: 'win' }
-						  }
-						});
-						/*
-						[{
-							_id : ''
-							origin : '',
-							destination : '',
-							date : '',
-						},
-						{
-							//...
-						}]
-						*/
-				</script>
+				</div>
+				<div class="col-1" id="icon2">
+					<i class="fas fa-angle-down" style="height:100%; font-size: 250%; color : white"></i>
+				</div>
+			</div>
+			<br>
+		<div class="container-fluid" id="map-container">
+			<div class="row" style="height: 550px;">
+				<div class="col-md-1"></div>
+				<div class="col-md-2">
+					<label for="originAiports">Origin Airport : </label>
+					<select id = "originAiports" name="originAiports" onchange="displayFlights()">
+						<option disabled selected>Choose origin airport ...</option>
+					</select>
+					<label for="from">From : </label>
+					<input id = "from" type="date" name="from" onchange="displayFlights()" value="2016-01-01" min="2016-01-01" max="2016-01-31"/>
+					<label for="to">To : </label>
+					<input id = "to" type="date" name="to" onchange="displayFlights()" value="2016-01-31" min="2016-01-01" max="2016-01-31"/>
+				</div>
+				<div class = "col-md-9" id="container"></div>
+			</div>
+			<div class="container">
+				<div class="row" id="table-container"></div>
+			</div>
 		</div>
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
 
+		<!-- Scripts -->
+		<script src="https://use.fontawesome.com/a38786568f.js"></script>
+		<script defer src="https://use.fontawesome.com/releases/v5.0.1/js/all.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="http://d3js.org/topojson.v1.min.js"></script>
+		<script src="js/datamaps/dist/datamaps.usa.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/skel.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		<script>
+				function onload() {
+					displayDelay();
+					getAirportList();
+				}
+				function displayDelay() {
+					$.getJSON('db_data?q=delay_avg', function(data) {
+							var container = document.getElementById("percentage-container");
+							for (item of data) {
+								container.innerHTML += '<div class="col-md-2">'
+								+ '<svg viewbox="0 0 36 36" class="circular-chart blue">'
+							  + '<path class="circle-bg"'
+							  + 'd="M18 2.0845'
+								+ 'a 15.9155 15.9155 0 0 1 0 31.831'
+							  + 'a 15.9155 15.9155 0 0 1 0 -31.831"'
+							  + '/>'
+							  + '<path class="circle"'
+							  + 'stroke-dasharray="' + parseFloat(item.avg_Delay)*100 + ', 100"'
+							  + 'd="M18 2.0845'
+							  + 'a 15.9155 15.9155 0 0 1 0 31.831'
+							  + 'a 15.9155 15.9155 0 0 1 0 -31.831"'
+							  + '/>'
+							  + '<text x="18" y="19" class="percentage">' + item._id + ' (' + parseInt(parseFloat(item.avg_Delay)*100) + '%)</text>'
+							  + '</svg>'
+								+ '</div>'
+							}
+					});
+				}
+
+				function getAirportList() {
+					$.getJSON('db_data?q=airports', function(data) {
+							var list = document.getElementById("originAiports");
+							for (item of data) {
+								var option = document.createElement("option");
+								option.text = item._id;
+								option.value = item._id;
+								list.appendChild(option);
+							}
+					});
+				}
+
+				function displayArray(json_data) {
+					var table_container = document.getElementById("table-container");
+					table_container.innerHTML = '<table id="flights_table">'
+						+'<tr>'
+						+'<th>Flight ID</th>'
+						+'<th>Date</th>'
+						+'<th>Info</th>'
+						+'</tr>'
+						+'</table>';
+					var flights_table = document.getElementById("flights_table");
+					for (elem of json_data) {
+						var FlightDate = elem.FlightDate.substring(0,10);
+						flights_table.innerHTML += '<tr onclick="window.location.href=\'/flightInfo?id=' + elem._id + '\';">'
+							+'<td>' + elem._id + '</td>'
+							+'<td>' + FlightDate + '</td>'
+							+'<td>' + elem.origin + ' -> ' + elem.destination + '</td>'
+							+'</tr>';
+					}
+
+				}
+
+				function displayFlights() {
+					var o_airport = document.getElementById("originAiports").value;
+					var from_date = document.getElementById("from").value;
+					var to_date = document.getElementById("to").value;
+					if((o_airport && from_date && to_date) != '') {
+						var json_url = '/db_data?q=flights_arc&o_airport=' + o_airport + '&from=' + from_date + '&to=' + to_date;
+						console.log(json_url);
+						d3.json(json_url, function(json_data) {
+							// Arcs coordinates can be specified explicitly with latitude/longtitude,
+							// or just the geographic center of the state/country.
+							map.arc(json_data);
+							displayArray(json_data);
+						});
+					}
+				}
+
+				function hide_container(container_num) {
+					switch (container_num) {
+						case 1:
+							var container = document.getElementById("percentage-container");
+							var icon = document.getElementById("icon1");
+
+							if($(container).is(":visible")) {
+								icon.innerHTML = '<i class="fas fa-angle-left" style="height:100%; font-size: 250%; color : white"></i>';
+								$(container).hide();
+							} else {
+								icon.innerHTML = '<i class="fas fa-angle-down" style="height:100%; font-size: 250%; color : white"></i>'
+								$(container).show();
+							}
+							break;
+							case 2:
+								var container = document.getElementById("map-container");
+								var icon = document.getElementById("icon2");
+
+								if($(container).is(":visible")) {
+									icon.innerHTML = '<i class="fas fa-angle-left" style="height:100%; font-size: 250%; color : white"></i>';
+									$(container).hide();
+								} else {
+									icon.innerHTML = '<i class="fas fa-angle-down" style="height:100%; font-size: 250%; color : white"></i>'
+									$(container).show();
+								}
+								break;
+							default:
+								break;
+					}
+				}
+
+				var map = new Datamap({
+					element: document.getElementById("container"),
+					scope: 'usa',
+					fills: {
+						defaultFill: "#323f61",
+						win: '#0fa0fa'
+					},
+					data: {
+						'TX': { fillKey: 'win' },
+						'FL': { fillKey: 'win' },
+						'NC': { fillKey: 'win' },
+						'CA': { fillKey: 'win' },
+						'NY': { fillKey: 'win' },
+						'CO': { fillKey: 'win' }
+					}
+				});
+				/* [{
+					_id : ''
+					origin : '',
+					destination : '',
+					date : '',
+				}] */
+		</script>
 	</body>
 </html>

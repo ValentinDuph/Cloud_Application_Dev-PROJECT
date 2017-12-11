@@ -35,6 +35,11 @@ app.get('/standard', function (req, res) {
 app.get('/analyst', function (req, res) {
   res.sendFile( path_app_analyste + "map.html" );
 })
+app.get('/flightInfo', function (req, res) {
+  var flight_id = req.query.id;
+  res.sendFile( path_app_analyste + "flightInfo.html" );
+})
+
 app.get('/admin', function (req, res) {
   res.sendFile( path_app_administrateur + "" );
 })
@@ -92,6 +97,39 @@ app.get('/db_data', function(req,res) {
           });
       });
       break;
+      case 'delay_avg':
+        mongoClient.connect(url_db, function(err, db) {
+          db.collection(flights_collection).aggregate([
+            {
+              $match: {
+                "DepDel15" : { "$exists": true, "$ne": "NULL" }
+              }
+            },
+            {
+              $project: {
+                _id : "$OriginCityName",
+                "DepDel15" : '$DepDel15'
+              }
+            },
+            {
+              $group: {
+                _id : "$_id",
+                "avg_Delay": { $avg: "$DepDel15"}
+              }
+            },
+            {
+              $sort: {
+                'avg_Delay' : -1
+              }
+            }
+          ]).toArray(function(err, result) {
+            if (err) throw err;
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(result));
+            db.close();
+          });;
+        });
+        break;
     default:
       break;
   }
