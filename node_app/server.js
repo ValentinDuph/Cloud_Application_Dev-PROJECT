@@ -108,6 +108,7 @@ app.get('/db_data', function(req,res) {
           res.send(JSON.stringify(result));
           db.close();
         })
+      )};
       break;
     case 'airports' :
       mongoClient.connect(url_db, function(err, db) {
