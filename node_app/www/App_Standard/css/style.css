@@ -1,0 +1,22 @@
+/*.container-fluid{
+  background-color: #bdc3c7;
+}
+
+.container{
+  background-color: #16a085;
+  color: #ecf0f1;
+}
+
+.row1{
+  text-align: center;
+  height: 100px;
+}
+
+.row2{
+  height: 500px;
+}
+*/
+
+#submitButton{
+  margin-top: 40px;
+}

@@ -2,9 +2,111 @@
 <html>
   <head>
     <meta charset="utf-8">
+<<<<<<< HEAD
+    <title>Standard</title>
+
+    <link rel="stylesheet" href="App_Standard/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="App_Standard/css/style.css">
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="App_Standard/js/bootstrap.bundle.min.js"></script>
+    <script src="App_Standard/js/script.js"></script>
+
+    <!-- <script src="App_Standard/js/bootstrap.min.js"></script> -->
+
+  </head>
+  <body class="subpage">
+    <!-- Header -->
+      <header id="header">
+        <div class="inner">
+          <a href="index.html" class="logo">Standard Interface</a>
+          <nav id="nav">
+            <a href="index.html">Home</a>
+            <a href="generic.html">Generic</a>
+            <a href="elements.html">Elements</a>
+          </nav>
+          <a href="#navPanel" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+        </div>
+      </header>
+      <div class="inner">
+        <br />
+        <header class="align-center">
+          <h2>World Flights Map</h2>
+        </header>
+
+        <p>What is your request ?</p>
+        <form id="formQuery" style = "position : float; float: left; width : 200px; height : 200px">
+          <select id="querySelector" class="custom-select" onchange="querySelect()">
+            <option value="0" selected>Choose query</option>
+            <option value="1">Get all time infos for one flight</option>
+            <option value="2">Get all flights of one company</option>
+            <option value="3">Get all flights arrival and departure of one airport</option>
+            <option value="4">Get all flights for one journey</option>
+          </select>
+
+          <button id="submitButton" type="submit" form="formQuery" value="Submit" onclick="query()">Search</button>
+        </form>
+        <div id="container" style="position: float; float: right; width: 80%; height: 550px;">
+
+        </div>
+      </div>
+
+
+    <!-- <div class="container-fluid">
+      <div class="row row1">
+        <div class="container">
+          <h2>Hello Standard User</h2>
+        </div>
+      </div>
+      <div class="row row2">
+        <div class="container">
+          <h4>What is your request ?</h4> -->
+
+          <!-- <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Choose query
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+          </div> -->
+<!--
+          <form class="" action="index.html" method="post">
+            <div class="row">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <select id="querySelector" class="custom-select" onchange="myfunction()">
+                  <option selected>Choose query</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <input type="text" class="form-control" id="validationDefault01" placeholder="First name" value="Give parameter" required>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <button class="btn btn-info" type="submit">Submit form</button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div> -->
+=======
     <title></title>
   </head>
   <body>
+>>>>>>> 58389684b06a388c4d8ba319a0b902d0c68d28a8
 
   </body>
 </html>
