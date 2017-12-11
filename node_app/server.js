@@ -80,7 +80,6 @@ app.get('/db_data', function(req,res) {
         });
       });
       break;
-<<<<<<< HEAD
     case 'flight_info' :
       var flightNb = req.query.for;
       //var date = new Date(req.query.on);
@@ -109,23 +108,21 @@ app.get('/db_data', function(req,res) {
           res.send(JSON.stringify(result));
           db.close();
         })
-=======
+      break;
     case 'airports' :
       mongoClient.connect(url_db, function(err, db) {
-        db.collection(flights_collection).aggregate(
-          [
-            {
-              $group:{
-                _id:'$OriginCityName'
-              }
-            }
-          ]).toArray(function(err, result) {
-            if (err) throw err;
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify(result));
-            db.close();
-          });
->>>>>>> 58389684b06a388c4d8ba319a0b902d0c68d28a8
+        db.collection(flights_collection).aggregate([
+                    {
+                      $group:{
+                        _id:'$OriginCityName'
+                      }
+                    }
+                  ]).toArray(function(err, result) {
+                    if (err) throw err;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify(result));
+                    db.close();
+                  });
       });
       break;
       case 'delay_avg':
