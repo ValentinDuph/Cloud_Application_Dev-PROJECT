@@ -48,19 +48,19 @@ app.get('/db_data', function(req,res) {
   var query_type = req.query.q;
 
   switch(query_type) {
-    case 'flights_arc' :
-      var from = new Date(req.query.from);
-      var to = new Date (req.query.to);
-      var o_airport = req.query.o_airport;
 
-      console.log(o_airport);
-      console.log(from + ' --> ' + to);
+    case 'flights_arc' :
+
+      var date_from = new Date(req.query.from);
+      var date_to = new Date (req.query.to);
+      var origin_airport = req.query.o_airport;
+
       mongoClient.connect(url_db, function(err, db) {
         db.collection(flights_collection).aggregate([
           {
             $match: {
-              ORIGIN_CITY_NAME : o_airport,
-              FL_DATE : {$gte: from, $lte: to}
+              ORIGIN_CITY_NAME : origin_airport,
+              FL_DATE : {$gte: date_from, $lte: date_to}
             },
           },
           { $limit : 50 },
@@ -79,9 +79,10 @@ app.get('/db_data', function(req,res) {
         });
       });
       break;
+
     case 'flight_info' :
       var flightNb = req.query.for;
-      //var date = new Date(req.query.on);
+
       mongoClient.connect(url_db, function(err, db) {
         db.collection(flights_collection).find({
             "FL_NUM" : flightNb,
@@ -99,9 +100,10 @@ app.get('/db_data', function(req,res) {
         })
       });
       break;
+
     case 'get_all' :
       mongoClient.connect(url_db, function(err, db) {
-        db.collection(flights_collection).find({}).limit(100).toArray(function(err, result) {
+        db.collection(flights_collection).find({}).limit(500).toArray(function(err, result) {
           if (err) throw err;
           res.setHeader('Content-Type', 'application/json');
           res.send(JSON.stringify(result));
@@ -109,6 +111,7 @@ app.get('/db_data', function(req,res) {
         })
       });
       break;
+
     case 'airports' :
       // Return list of airports city name
       mongoClient.connect(url_db, function(err, db) {
@@ -127,18 +130,19 @@ app.get('/db_data', function(req,res) {
         });
       });
       break;
+
     case 'delay_avg':
       mongoClient.connect(url_db, function(err, db) {
         db.collection(flights_collection).aggregate([
           {
             $match: {
-              "DepDel15" : { "$exists": true, "$ne": "NULL" }
+              "DEP_DEL15" : { "$exists": true, "$ne": "NULL" }
             }
           },
           {
             $project: {
-              _id : "$OriginCityName",
-              "DepDel15" : '$DepDel15'
+              _id : "$ORIGIN_CITY_NAME",
+              "DepDel15" : '$DEP_DEL15'
             }
           },
           {
@@ -161,33 +165,10 @@ app.get('/db_data', function(req,res) {
         });;
       });
       break;
+
     default:
       break;
   }
-})
-
-app.get('/findOne', function(req,res) {
-  mongoClient.connect(url_db, function(err, db) {
-    if (err) throw err;
-    db.collection(flights_collection).findOne({}, function(err, result) {
-      if (err) throw err;
-      res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(result));
-      db.close();
-    });
-  });
-})
-
-app.get('/findAll', function(req,res) {
-  mongoClient.connect(url_db, function(err, db) {
-    if (err) throw err;
-    db.collection(flights_collection).find({}).toArray(function(err, result) {
-      if (err) throw err;
-      res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(result));
-      db.close();
-    });
-  });
 })
 
 server.on('close', function() { // On écoute l'évènement close
