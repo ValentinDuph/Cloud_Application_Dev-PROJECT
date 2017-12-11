@@ -11,7 +11,7 @@ var mongodb = require('mongodb');
 const app = express();
 const mongoClient = mongodb.MongoClient;
 const url_db = "mongodb://localhost:27017/Airline";
-const flights_collection = "On_Time_On_Time_Performance_2016_1"
+const flights_collection = "FLIGHTS"
 
 //PATHS
 const path_app_standard = __dirname + "/www/App_Standard/";
@@ -56,23 +56,22 @@ app.get('/db_data', function(req,res) {
       console.log(o_airport);
       console.log(from + ' --> ' + to);
       mongoClient.connect(url_db, function(err, db) {
-        db.collection(flights_collection).aggregate(
-          [
-            {
-              $match: {
-                OriginCityName : o_airport,
-                FlightDate: {$gte: from, $lte: to}
-              }
+        db.collection(flights_collection).aggregate([
+          {
+            $match: {
+              ORIGIN_CITY_NAME : o_airport,
+              FL_DATE : {$gte: from, $lte: to}
             },
-            {
-              $project: {
-                  "origin" : "$OriginState",
-                  "destination" : "$DestState",
-                  FlightDate : 1
-              }
-            },
-          ]
-        ).toArray(function(err, result) {
+          },
+          { $limit : 50 },
+          {
+            $project: {
+                "origin" : "$ORIGIN_STATE_ABR",
+                "destination" : "$DEST_STATE_ABR",
+                "FlightDate" : "$FL_DATE"
+            }
+          }
+        ]).toArray(function(err, result) {
           if (err) throw err;
           res.setHeader('Content-Type', 'application/json');
           res.send(JSON.stringify(result));
@@ -111,54 +110,57 @@ app.get('/db_data', function(req,res) {
       });
       break;
     case 'airports' :
+      // Return list of airports city name
       mongoClient.connect(url_db, function(err, db) {
         db.collection(flights_collection).aggregate([
-                    {
-                      $group:{
-                        _id:'$OriginCityName'
-                      }
-                    }
-                  ]).toArray(function(err, result) {
-                    if (err) throw err;
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(result));
-                    db.close();
-                  });
+          {
+            $group:{
+              _id:'$ORIGIN_CITY_NAME'
+            }
+          },
+          { $sort : { _id : 1 } }
+        ]).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+          db.close();
+        });
       });
       break;
-      case 'delay_avg':
-        mongoClient.connect(url_db, function(err, db) {
-          db.collection(flights_collection).aggregate([
-            {
-              $match: {
-                "DepDel15" : { "$exists": true, "$ne": "NULL" }
-              }
-            },
-            {
-              $project: {
-                _id : "$OriginCityName",
-                "DepDel15" : '$DepDel15'
-              }
-            },
-            {
-              $group: {
-                _id : "$_id",
-                "avg_Delay": { $avg: "$DepDel15"}
-              }
-            },
-            {
-              $sort: {
-                'avg_Delay' : -1
-              }
+    case 'delay_avg':
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate([
+          {
+            $match: {
+              "DepDel15" : { "$exists": true, "$ne": "NULL" }
             }
-          ]).toArray(function(err, result) {
-            if (err) throw err;
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify(result));
-            db.close();
-          });;
-        });
-        break;
+          },
+          {
+            $project: {
+              _id : "$OriginCityName",
+              "DepDel15" : '$DepDel15'
+            }
+          },
+          {
+            $group: {
+              _id : "$_id",
+              "avg_Delay": { $avg: "$DepDel15"}
+            }
+          },
+          {
+            $sort: {
+              'avg_Delay' : -1
+            }
+          }
+        ]).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+
+          db.close();
+        });;
+      });
+      break;
     default:
       break;
   }
