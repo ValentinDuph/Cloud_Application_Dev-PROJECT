@@ -5,8 +5,11 @@
 ## Introduction
 This repository contains a school project.
 The aim of this project is to Visualize Data using simple and complex queries.
-<b>[SQL Database : Airline]</b>
+We choose a database containing information of USA flights in January, February and March.
 
+<a href="https://relational.fit.cvut.cz/dataset/Airline"><b><[SQL Database : Airline]</b></a>
+
+Database ref. : https://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&DB_Short_Name=On-Time
 ## Technologies
 
 1. NodeJS
@@ -31,9 +34,13 @@ npm install dependencies
 mongod
 ```
 
-4. Run Node server
+4. Import data into your mongo server. You can easily do that using a Mongo Client :
+  * Connect the client to the server
+  * Import data : Right click on your server > "Import..." > "BSON - mongodump folder" > Select the folder located in : Cloud_Application_Dev-PROJECT/data/data_BSON_new"
+
+5. Run Node server
 ```
 node node_app/server.js
 ```
 
-5. Go to http://localhost:8080/ to display index.html
+6. Go to http://localhost:8080/ to display index.html
