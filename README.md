@@ -7,7 +7,7 @@ This repository contains a school project.
 The aim of this project is to Visualize Data using simple and complex queries.
 We choose a database containing information of USA flights in January, February and March.
 
-<a href="https://relational.fit.cvut.cz/dataset/Airline"><b><[SQL Database : Airline]</b></a>
+<a href="https://relational.fit.cvut.cz/dataset/Airline"><b>[SQL Database : Airline]</b></a>
 
 Database ref. : https://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236&DB_Short_Name=On-Time
 ## Technologies
