@@ -33,7 +33,7 @@ app.get('/standard', function (req, res) {
   res.sendFile( path_app_standard + "index.html" );
 })
 app.get('/analyst', function (req, res) {
-  res.sendFile( path_app_analyste + "map.html" );
+  res.sendFile( path_app_analyste + "analyst.html" );
 })
 app.get('/flightInfo', function (req, res) {
   var flight_id = req.query.id;
@@ -130,6 +130,74 @@ app.get('/db_data', function(req,res) {
         });
       });
       break;
+
+    case 'dep_delay_avg' :
+
+      var airport = req.query.airport;
+
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate([
+          {
+            $match: {
+              "DEP_DEL15" : { "$exists": true, "$ne": "NULL" },
+              ORIGIN_CITY_NAME : airport
+            }
+          },
+          {
+            $project: {
+              _id : "$ORIGIN_CITY_NAME",
+              "DepDel15" : '$DEP_DEL15'
+            }
+          },
+          {
+            $group: {
+              _id : "$_id",
+              "avg_Delay": { $avg: "$DepDel15"}
+            }
+          }
+        ]).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+
+          db.close();
+        });;
+      });
+      break;
+
+      case 'arr_delay_avg' :
+
+        var airport = req.query.airport;
+
+        mongoClient.connect(url_db, function(err, db) {
+          db.collection(flights_collection).aggregate([
+            {
+              $match: {
+                "ARR_DEL15" : { "$exists": true, "$ne": "NULL" },
+                DEST_CITY_NAME : airport
+              }
+            },
+            {
+              $project: {
+                _id : "$DEST_CITY_NAME",
+                "ArrDel15" : '$ARR_DEL15'
+              }
+            },
+            {
+              $group: {
+                _id : "$_id",
+                "avg_Delay": { $avg: "$ArrDel15"}
+              }
+            }
+          ]).toArray(function(err, result) {
+            if (err) throw err;
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(result));
+
+            db.close();
+          });;
+        });
+        break;
 
     case 'delay_avg':
       mongoClient.connect(url_db, function(err, db) {
