@@ -11,16 +11,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 	</head>
-	<body class="subpage">
+	<body class="subpage" onload="getAirportList()">
 
 		<!-- Header -->
 			<header id="header">
 				<div class="inner">
 					<a href="index.html" class="logo">Analyst Interface</a>
 					<nav id="nav">
-						<a href="index.html">Home</a>
-						<a href="generic.html">Generic</a>
-						<a href="elements.html">Elements</a>
+						<a href="index.html">&#xf015; Home</a>
 					</nav>
 					<a href="#navPanel" class="navPanelToggle"><span class="fa fa-bars"></span></a>
 				</div>
@@ -32,24 +30,45 @@
 						<h2>World Flights Map</h2>
 						<p>Displaying all flights between 2 dates</p>
 					</header>
+					<script src="https://use.fontawesome.com/a38786568f.js"></script>
 					<script src="http://d3js.org/d3.v3.min.js"></script>
 					<script src="http://d3js.org/topojson.v1.min.js"></script>
 					<script src="js/datamaps/dist/datamaps.usa.min.js"></script>
+					<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 					<form style = "position : float; float: left; width : 200px">
+						<label for="originAiports">Origin Airport : </label>
+						<select class="originAiports" id = "originAiports" name="originAiports" onchange="displayFlights()">
+							<option disabled selected>Choose origin airport ...</option>
+						</select>
+						<br />
+						<br />
 						<label for="from">From : </label>
-						<input id = "from" type="date" name="from" onchange="dateChange()"/>
+						<input id = "from" type="date" name="from" onchange="displayFlights()" value="2016-01-01" min="2016-01-01" max="2016-01-31"/>
 						<br />
 						<br />
 						<label for="to">To : </label>
-						<input id = "to" type="date" name="to" onchange="dateChange()"/>
+						<input id = "to" type="date" name="to" onchange="displayFlights()" value="2016-01-31" min="2016-01-01" max="2016-01-31"/>
 					</form>
 					<div id="container" style="position: float; float: right; width: 80%; height: 550px;"></div>
 					<script>
-						function dateChange() {
+						function getAirportList(){
+							var airports = new Array();
+							$.getJSON('db_data?q=airports', function(data) {
+							    var list = document.getElementById("originAiports");
+									for (item of data) {
+										var option = document.createElement("option");
+										option.text = item._id;
+										option.value = item._id;
+										list.appendChild(option);
+									}
+							});
+						}
+						function displayFlights() {
+							var o_airport = document.getElementById("originAiports").value;
 							var from_date = document.getElementById("from").value;
 							var to_date = document.getElementById("to").value;
-							if((from_date && to_date) != '') {
-								var json_url = '/db_data?q=flights_arc&from=' + from_date + '&to=' + to_date;
+							if((o_airport && from_date && to_date) != '') {
+								var json_url = '/db_data?q=flights_arc&o_airport=' + o_airport + '&from=' + from_date + '&to=' + to_date;
 								console.log(json_url);
 								d3.json(json_url, function(json_data) {
 									// Arcs coordinates can be specified explicitly with latitude/longtitude,
