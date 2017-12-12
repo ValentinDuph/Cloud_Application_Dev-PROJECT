@@ -140,19 +140,22 @@ app.get('/db_data', function(req,res) {
           {
             $match: {
               "DEP_DEL15" : { "$exists": true, "$ne": "NULL" },
+              "DEP_DELAY" : { "$exists": true, "$ne": "NULL" },
               ORIGIN_CITY_NAME : airport
             }
           },
           {
             $project: {
               _id : "$ORIGIN_CITY_NAME",
-              "DepDel15" : '$DEP_DEL15'
+              "DepDel15" : '$DEP_DEL15',
+              "DepDelay" : '$DEP_DELAY'
             }
           },
           {
             $group: {
               _id : "$_id",
-              "avg_Delay": { $avg: "$DepDel15"}
+              "avg_Delay": { $avg: "$DepDel15"},
+              "avg_DelayTime": { $avg: "$DepDelay"},
             }
           }
         ]).toArray(function(err, result) {
@@ -174,19 +177,22 @@ app.get('/db_data', function(req,res) {
             {
               $match: {
                 "ARR_DEL15" : { "$exists": true, "$ne": "NULL" },
+                "ARR_DELAY" : { "$exists": true, "$ne": "NULL" },
                 DEST_CITY_NAME : airport
               }
             },
             {
               $project: {
                 _id : "$DEST_CITY_NAME",
-                "ArrDel15" : '$ARR_DEL15'
+                "ArrDel15" : '$ARR_DEL15',
+                "ArrDelay" : '$ARR_DELAY',
               }
             },
             {
               $group: {
                 _id : "$_id",
-                "avg_Delay": { $avg: "$ArrDel15"}
+                "avg_Delay": { $avg: "$ArrDel15"},
+                "avg_DelayTime": { $avg: "$ArrDelay"},
               }
             }
           ]).toArray(function(err, result) {

@@ -56,8 +56,8 @@
         <div class="col-lg-4 col-md-4 col-sm-4">
           <div class="card border-light mb-3">
             <div class="card-header">Delay Departure Flight</div>
-            <div class="card-body" id="dep-delay-container">
-              <div class="c100 p0 dark big orange" style=" display: table; margin: 0 auto;">
+            <div class="card-body" id="dep-delay-container" style="margin-left: 30px;">
+              <div class="c100 p0 dark big orange">
                 <span>0%</span>
                 <div class="slice">
                   <div class="bar"></div>
@@ -70,8 +70,8 @@
         <div class="col-lg-4 col-md-4 col-sm-4">
           <div class="card border-light mb-3">
             <div class="card-header">Delay Arrival Flight</div>
-            <div class="card-body" id="arr-delay-container">
-              <div class="c100 p0 dark big orange" style=" display: table; margin: 0 auto;">
+            <div class="card-body" id="arr-delay-container" style="margin-left: 30px;">
+              <div class="c100 p0 dark big orange">
                 <span>0%</span>
                 <div class="slice">
                   <div class="bar"></div>
@@ -83,10 +83,9 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-4">
           <div class="card border-light mb-3">
-            <div class="card-header">Arrival Flight Delay</div>
-            <div class="card-body">
-              <h4 class="card-title">Light card title</h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <div class="card-header">Average Delay</div>
+            <div class="card-body" style="height: 305px">
+              <canvas id="myChart" width="500" height="100"></canvas>
             </div>
           </div>
         </div>
@@ -99,6 +98,8 @@
 
     <!-- Script -->
     <script src="js/jquery-3.2.1.min.js"></script> <!-- JQuery -->
+    <script src="js/Chart.min.js"></script> <!-- Chart -->
+    <script src="js/Chart.bundle.min.js"></script> <!-- Chart -->
 		<script type="text/javascript" src="App_Analyste/js/script2.js"></script> <!-- Personal script -->
   </body>
 </html>

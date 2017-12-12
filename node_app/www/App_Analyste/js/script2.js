@@ -1,3 +1,4 @@
+
 function onload() {
   getAirportList();
 }
@@ -19,6 +20,7 @@ function getAirportList() {
 function displayInfo() {
   var selectedAiport = document.getElementById("originAiports").value;
   diplayDelayAvg(selectedAiport);
+  displayDelayBar(selectedAiport);
 }
 
 function diplayDelayAvg(selectedAiport) {
@@ -44,26 +46,41 @@ function diplayDelayAvg(selectedAiport) {
   });
 }
 
-function displayDelay() {
-  $.getJSON('db_data?q=delay_avg', function(data) {
-      var container = document.getElementById("delay-container");
-      for (item of data) {
-        container.innerHTML += '<div class="col-md-2">'
-        + '<svg viewbox="0 0 36 36" class="circular-chart blue">'
-        + '<path class="circle-bg"'
-        + 'd="M18 2.0845'
-        + 'a 15.9155 15.9155 0 0 1 0 31.831'
-        + 'a 15.9155 15.9155 0 0 1 0 -31.831"'
-        + '/>'
-        + '<path class="circle"'
-        + 'stroke-dasharray="' + parseFloat(item.avg_Delay)*100 + ', 100"'
-        + 'd="M18 2.0845'
-        + 'a 15.9155 15.9155 0 0 1 0 31.831'
-        + 'a 15.9155 15.9155 0 0 1 0 -31.831"'
-        + '/>'
-        + '<text x="18" y="19" class="percentage">' + item._id + ' (' + parseInt(parseFloat(item.avg_Delay)*100) + '%)</text>'
-        + '</svg>'
-        + '</div>'
+function displayDelayBar(selectedAiport) {
+  $.getJSON('db_data?q=dep_delay_avg&airport='+selectedAiport, function(json_data) {
+    var depDelayTime = parseFloat(json_data[0].avg_DelayTime);
+    $.getJSON('db_data?q=arr_delay_avg&airport='+selectedAiport, function(json_data2) {
+      var arrDelayTime = parseFloat(json_data2[0].avg_DelayTime);
+      var data = {
+        labels: ["Departures", "Arrivals"],
+        datasets: [
+          {
+              label: "Delay Average (min)",
+              fillColor: "rgba(220,220,220,0.5)",
+              strokeColor: "rgba(220,220,220,0.8)",
+              highlightFill: "rgba(220,220,220,0.75)",
+              highlightStroke: "rgba(220,220,220,1)",
+              data: [depDelayTime,arrDelayTime]
+          }
+        ]
       }
+      var options = {
+          scaleBeginAtZero: false,
+          responsive: true,
+          scaleStartValue : -50,
+          maintainAspectRatio: false,
+      };
+
+      var ctx = document.getElementById("myChart").getContext("2d");
+
+
+      var myBarChart = new Chart(ctx, {
+          type: 'bar',
+          data: data,
+          options: options
+      });
+      ctx.height = 500;
+      ctx.width = 100;
+    });
   });
 }
