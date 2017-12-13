@@ -1,5 +1,8 @@
 
-function getAirports(mongoClient, url_db, flights_collection, req, res) {
+var mongodb = require('mongodb');
+var mongoClient = mongodb.MongoClient;
+
+function getAirports(url_db, flights_collection, req, res) {
   // Return list of airports city name
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate([
