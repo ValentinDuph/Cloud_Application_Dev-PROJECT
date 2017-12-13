@@ -80,6 +80,39 @@ app.get('/db_data', function(req,res) {
       });
       break;
 
+
+    case 'journey_info' :
+      var origin_city = req.query.from;
+      var dest_cty = req.query.to;
+      var date = new Date(req.query.on);
+        mongoClient.connect(url_db, function(err, db) {
+          db.collection(flights_collection).aggregate([
+            {
+        			$match: {
+        				ORIGIN_CITY_NAME:origin_city,
+        				DEST_CITY_NAME: dest_cty,
+        				FL_DATE: date,
+        			}
+            },
+            {
+        			$project: {
+        				"Airline" : "$AIRLINE_NAME",
+        				"Flight Number" : "$FL_NUM",
+        				"Date" : "$FL_DATE",
+        				"Departure Time" : "$DEP_TIME",
+        				"Arrival Time" : "$ARR_TIME",
+        				"Flight Time" : "$AIR_TIME",
+        			}
+        		}
+          ]).toArray(function(err, result) {
+            if (err) throw err;
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(result));
+            db.close();
+          });
+        });
+        break;
+
     case 'flight_info' :
       var flightNb = req.query.for;
 
@@ -131,6 +164,25 @@ app.get('/db_data', function(req,res) {
       });
       break;
 
+    case 'company_Name':
+      // Return list of airline companies
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate([
+          {
+            $group:{
+              _id:'$AIRLINE_NAME'
+            }
+          },
+          { $sort : { _id : 1 } }
+        ]).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+          db.close();
+        });
+      });
+      break;
+
     case 'dep_delay_avg' :
 
       var airport = req.query.airport;
@@ -169,7 +221,6 @@ app.get('/db_data', function(req,res) {
       break;
 
       case 'arr_delay_avg' :
-
         var airport = req.query.airport;
 
         mongoClient.connect(url_db, function(err, db) {

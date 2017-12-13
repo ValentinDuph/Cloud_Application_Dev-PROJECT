@@ -40,16 +40,23 @@
         <form id="formQuery" style = "position : float; float: left; width : 200px; height : 200px">
           <select id="querySelector" class="custom-select" onchange="querySelect()">
             <option value="0" selected>Choose query</option>
-            <option value="1">Get all time infos for one flight</option>
+            <!-- <option value="1">Get all time infos for one flight</option> -->
             <option value="2">Get all flights of one company</option>
             <option value="3">Get all flights arrival and departure of one airport</option>
             <option value="4">Get all flights for one journey</option>
           </select>
 
-          <button id="submitButton" type="submit" form="formQuery" value="Submit" onclick="query()">Search</button>
+          <button id="submitButton" type="button" form="formQuery" value="Submit" onclick="query()">Search</button>
         </form>
-        <div id="container" style="position: float; float: right; width: 80%; height: 550px;">
-
+        <div id="container" style="position: float; float: right; width: 80%; height: 0px;">
+          <table id="table-container" class="table table-striped">
+            <thead>
+              <tr id="table_head">
+              </tr>
+            </thead>
+            <tbody id="table_body">
+            </tbody>
+          </table>
         </div>
       </div>
 
