@@ -240,6 +240,82 @@ app.get('/db_data', function(req,res) {
       });
       break;
 
+    case 'arr10companies':
+      var airport = req.query.airport;
+
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate([
+          {
+      			$match: {
+      			  DEST_CITY_NAME : airport
+      			}
+      		},
+          {
+      			$project: {
+      			    AIRLINE_NAME : 1
+      			}
+      		},
+          {
+      			$group: {
+      			  _id: "$AIRLINE_NAME",
+      			  count : {$sum : 1}
+      			}
+      		},
+          {
+      			$sort: {
+      			  count : -1
+      			}
+      		},
+          {
+      			$limit: 10
+      		}
+      	]).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+          db.close();
+        });;
+      });
+      break;
+
+    case 'dep10companies':
+      var airport = req.query.airport;
+
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate([
+          {
+      			$match: {
+      			  ORIGIN_CITY_NAME : airport
+      			}
+      		},
+          {
+      			$project: {
+      			    AIRLINE_NAME : 1
+      			}
+      		},
+          {
+      			$group: {
+      			  _id: "$AIRLINE_NAME",
+      			  count : {$sum : 1}
+      			}
+      		},
+          {
+      			$sort: {
+      			  count : -1
+      			}
+      		},
+          {
+      			$limit: 10
+      		}
+      	]).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+          db.close();
+        });;
+      });
+      break;
+
     default:
       break;
   }

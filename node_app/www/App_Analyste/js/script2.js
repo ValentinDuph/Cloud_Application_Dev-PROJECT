@@ -23,6 +23,8 @@ function displayInfo() {
   move(0,20);
   diplayDelayAvg(selectedAiport);
   displayDelayBar(selectedAiport);
+  display10arrComp(selectedAiport);
+  display10depComp(selectedAiport);
 }
 
 function move(from, to) {
@@ -103,5 +105,31 @@ function displayDelayBar(selectedAiport) {
       ctx.height = 500;
       ctx.width = 100;
     });
+  });
+}
+
+function display10arrComp(selectedAiport) {
+  $.getJSON('db_data?q=arr10companies&airport='+selectedAiport, function(json_data) {
+    var tableBody = document.getElementById("top10Arr");
+    tableBody.innerHTML = "";
+    for(item of json_data) {
+      tableBody.innerHTML += "<tr>"
+        + "<th scope='row'>" + item._id + "</th>"
+        + "<td>" + item.count + "</td>"
+        + "</tr>"
+    }
+  });
+}
+
+function display10depComp(selectedAiport) {
+  $.getJSON('db_data?q=dep10companies&airport='+selectedAiport, function(json_data) {
+    var tableBody = document.getElementById("top10Dep");
+    tableBody.innerHTML = "";
+    for(item of json_data) {
+      tableBody.innerHTML += "<tr>"
+        + "<th scope='row'>" + item._id + "</th>"
+        + "<td>" + item.count + "</td>"
+        + "</tr>"
+    }
   });
 }
