@@ -2,8 +2,9 @@
 var http = require('http');
 var url = require('url');
 var querystring = require('querystring');
-var fct = require('./functions.js'); // Fait appel à functions_lib.js (dans le dossier functions)
-var api = require('./mongoApi.js')
+var fct = require('./functions.js'); // Fait appel à functions.js (dans le dossier functions)
+var api = require('./mongoApi.js') // Fait appel à mongoApi.js
+var path = require('./paths.js') // Fait appel à mongoApi.js
 var express = require('express');
 var path = require('path');
 var mongodb = require('mongodb');
@@ -13,11 +14,6 @@ const app = express();
 const mongoClient = mongodb.MongoClient;
 const url_db = "mongodb://localhost:27017/Airline";
 const flights_collection = "FLIGHTS"
-
-//PATHS
-const path_app_standard = __dirname + "/www/App_Standard/";
-const path_app_analyste = __dirname + "/www/App_Analyste/";
-const path_app_administrateur = __dirname + "/www/App_Administrateur/";;
 
 var server = app.listen(8080, function () {
   var host = server.address().address
@@ -31,18 +27,18 @@ var server = app.listen(8080, function () {
 app.use(express.static('www'));
 
 app.get('/standard', function (req, res) {
-  res.sendFile( path_app_standard + "index.html" );
+  res.sendFile( path.app_standard + "index.html" );
 })
 app.get('/analyst', function (req, res) {
-  res.sendFile( path_app_analyste + "analyst.html" );
+  res.sendFile( path.app_analyste + "analyst.html" );
 })
 app.get('/flightInfo', function (req, res) {
   var flight_id = req.query.id;
-  res.sendFile( path_app_analyste + "flightInfo.html" );
+  res.sendFile( path.app_analyste + "flightInfo.html" );
 })
 
 app.get('/admin', function (req, res) {
-  res.sendFile( path_app_administrateur + "" );
+  res.sendFile( path.app_administrateur + "" );
 })
 
 app.get('/db_data', function(req,res) {
@@ -146,22 +142,7 @@ app.get('/db_data', function(req,res) {
       break;
 
     case 'airports' :
-      // Return list of airports city name
-      mongoClient.connect(url_db, function(err, db) {
-        db.collection(flights_collection).aggregate([
-          {
-            $group:{
-              _id:'$ORIGIN_CITY_NAME'
-            }
-          },
-          { $sort : { _id : 1 } }
-        ]).toArray(function(err, result) {
-          if (err) throw err;
-          res.setHeader('Content-Type', 'application/json');
-          res.send(JSON.stringify(result));
-          db.close();
-        });
-      });
+      api.getAirports(url_db, flights_collection, req, res)
       break;
 
     case 'company_Name':
