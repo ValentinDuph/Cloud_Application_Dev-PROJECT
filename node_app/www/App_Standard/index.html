@@ -17,7 +17,7 @@
     <!-- <script src="App_Standard/js/bootstrap.min.js"></script> -->
 
   </head>
-  <body class="subpage">
+  <body class="subpage" onload="onload()">
     <!-- Header -->
       <header id="header">
         <div class="inner">
@@ -45,6 +45,9 @@
             <option value="3">Get all flights arrival and departure of one airport</option>
             <option value="4">Get all flights for one journey</option>
           </select>
+          <div id="selectors" style="margin-top:20px;">
+
+          </div>
 
           <button id="submitButton" type="button" form="formQuery" value="Submit" onclick="query()">Search</button>
         </form>

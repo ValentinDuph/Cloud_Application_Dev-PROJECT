@@ -81,7 +81,7 @@ app.get('/db_data', function(req,res) {
       });
       break;
 
-    case 'journey_info' :
+    case 'journey' :
       var origin_city = req.query.from;
       var dest_cty = req.query.to;
       var date = new Date(req.query.on);
@@ -112,6 +112,66 @@ app.get('/db_data', function(req,res) {
           });
         });
         break;
+
+    case 'company_flights':
+      var company = req.query.for;
+      var date = new Date(req.query.on);
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate([
+          {
+            $match: {
+              AIRLINE_NAME:company,
+              FL_DATE:date,
+            }
+          },
+          {
+            $project: {
+              "Airline" : "$AIRLINE_NAME",      //A CHANGER
+              "Flight Number" : "$FL_NUM",
+              "Date" : "$FL_DATE",
+              "Departure Time" : "$DEP_TIME",
+              "Arrival Time" : "$ARR_TIME",
+              "Flight Time" : "$AIR_TIME",
+            }
+          }
+        ]).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+          db.close();
+        });
+      });
+      break;
+
+    case 'airport_flights':
+      var airport = req.query.for;
+      var date = new Date(req.query.on);
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate([
+          {
+            $match: {
+              $or: [ { ORIGIN_CITY_NAME: airport} , { DEST_CITY_NAME: airport } ],
+              FL_DATE:date,
+            }
+          },
+          {
+            $project: {
+              "Airline" : "$AIRLINE_NAME",      //A CHANGER
+              "Flight Number" : "$FL_NUM",
+              "Date" : "$FL_DATE",
+              "Departure Time" : "$DEP_TIME",
+              "Arrival Time" : "$ARR_TIME",
+              "Flight Time" : "$AIR_TIME",
+            }
+          }
+        ]).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+          db.close();
+        });
+      });
+      break;
 
     case 'flight_info' :
       var flightNb = req.query.for;
@@ -164,7 +224,7 @@ app.get('/db_data', function(req,res) {
       });
       break;
 
-    case 'company_Name':
+    case 'company':
       // Return list of airline companies
       mongoClient.connect(url_db, function(err, db) {
         db.collection(flights_collection).aggregate([

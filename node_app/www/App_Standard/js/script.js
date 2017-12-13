@@ -1,24 +1,34 @@
-
-
-var standardQueries = [
-  //"Get all time infos for one flight",
-  "Get all flights of one company",
-  "Get all flights arrival and departure of one airport",
-  "Get all flights sorted by time for one journey",
-]
-
-
+var airports_list = [];
+var companies_list = [];
 var currentQueryArgument = [];
-var childList = [];
+
+//PRE-LOAD AND STOCK SIMPLES QUERIES
+//LIKE AIRPORTS AND COMPANIES LIST
+function onload(){
+  console.log("loading...");
+  var query_airport = "/db_data?q=airports";
+  d3.json(query_airport, function(json_data) {
+    json_data.forEach(function(doc){
+      airports_list.push(doc[Object.keys(doc)] );
+    });
+  });
+  console.log(airports_list);
+
+  var query_company = "/db_data?q=company";
+  d3.json(query_company, function(json_data) {
+    json_data.forEach(function(doc){
+      companies_list.push(doc[Object.keys(doc)] );
+    });
+  });
+  console.log(companies_list);
+
+  console.log("Loaded!");
+}
 
 function querySelect(){
-  if (childList != null) {
-    childList.forEach(function(nodeChild){
-      var elem = document.getElementById(nodeChild);
-      elem.parentNode.removeChild(elem);
-      childList = [];
-      return false;
-    });
+  var selectors = document.getElementById("selectors");
+  while (selectors.firstChild) {       //clean previous selector list
+    selectors.removeChild(selectors.firstChild);
   }
   var querySelected = document.getElementById("querySelector").value;
 
@@ -30,43 +40,77 @@ function querySelect(){
       currentQueryArgument = ["flight_Number","date"];
       break;
     case "2":
-      currentQueryArgument = ["company_Name"];
+      currentQueryArgument = ["company","date"];
       break;
     case "3":
-      currentQueryArgument = ["airport_Code"];
+      currentQueryArgument = ["airport","date"];
       break;
     case "4":
       currentQueryArgument = ["departure","arrival","date"];
       break;
   }
   currentQueryArgument.forEach(function(argument){
-    var objTo = document.getElementById("formQuery");
+    var objTo = document.getElementById("selectors");
     if(argument == "date"){
       var newElement = document.createElement('input');
       newElement.id = argument;
       newElement.type = "date";
+      objTo.appendChild(newElement);
     }
     else{
-      var newElement = document.createElement('select');
-      newElement.id = argument;
-      newElement.appendChild()
-
+      objTo.appendChild(generateElementSelect(argument));
     }
-    // var newElement = document.createElement('input');
-    // newElement.id = argument;
-    // if(argument == "date"){ newElement.type = "date"; }
-    // else{ newElement.type = "text"; }
-    // newElement.placeholder = argument;
-    childList.push(newElement.id);
-    objTo.insertBefore(newElement, document.getElementById("submitButton"));
-
   });
-
 }
+
+//CREATE SELECTORS IN FUNCTION OF QUERY
+function generateElementSelect(argument){
+  var new_select = document.createElement('select');
+  new_select.id = argument;
+  var new_option = document.createElement('option');
+  // new_option.selected;
+  // new_option.disabled;
+  new_option.innerHTML = "Choose the " + argument;
+  new_select.appendChild(new_option);
+
+  // if(argument == "departure" || argument == "arrival" || argument == "airport"){
+  //   var query = query_airport;
+  // }
+  // else if(argument == "company"){
+  //   var query = query_company;
+  // }
+  // //var query = "/db_data?q=" + argument;
+  // d3.json(query, function(json_data) {
+  //   //alert(json_data[1][Object.keys(json_data[1])]);
+  //   json_data.forEach(function(doc){
+  //     //alert(doc[Object.keys(doc)]);
+  //     var new_option = document.createElement('option');
+  //     new_option.innerHTML = doc[Object.keys(doc)];
+  //     new_select.appendChild(new_option);
+  //   });
+  // });
+
+  var option_List;
+  if(argument == "departure" || argument == "arrival" || argument == "airport"){
+    option_List = airports_list;
+  }
+  else if(argument == "company"){
+    option_List = companies_list;
+  }
+
+  option_List.forEach(function(option){
+    var new_option = document.createElement('option');
+    new_option.innerHTML = option;
+    new_select.appendChild(new_option);
+  })
+  return new_select;
+}
+
 
 // CREATE ARRAY FROM JSON
 function json_ToArray(json_data){
-  if(json_data != null){
+  if(json_data != null && json_data != "" && json_data != "[]"){
+    console.log(json_data);
     var fields = Object.keys(json_data[0]);
 
     // CREATE HEAD OF ARRAY
@@ -99,6 +143,7 @@ function json_ToArray(json_data){
       })
     }
   }
+  else{ alert("No data founded")}
 }
 
 function flightInfo(){
@@ -124,24 +169,26 @@ function query(){
         query += 'flight_info&for='+ flight_Number.value + '&on=' + date.value;
         break;
       case "2":
-        var company_Name = document.getElementById("company_Name");
-        query += 'company_flights&for='+company_Name.value;
+        var company = document.getElementById("company");
+        var date = document.getElementById("date");
+        query += 'company_flights&for=' + company.value + '&on=' + date.value;
         break;
       case "3":
-        var airport_Code = document.getElementById("airport_Code");
-        query += 'ariport_flights&for='+airport_Code.value;
+        var airport = document.getElementById("airport");
+        var date = document.getElementById("date");
+        query += 'airport_flights&for=' + airport.value + '&on=' + date.value;
         break;
       case "4":
         var departure = document.getElementById("departure");
         var arrival = document.getElementById("arrival");
         var date = document.getElementById("date");
-        query += 'journey_info&from='+ departure.value + '&to=' + arrival.value + '&on=' + date.value;
+        query += 'journey&from='+ departure.value + '&to=' + arrival.value + '&on=' + date.value;
         break;
       default: alert("error");
     }
+    console.log(query);
   }
   d3.json(query, function(json_data) {
     json_ToArray(json_data);
   });
-
 }
