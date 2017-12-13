@@ -4,9 +4,11 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/darkly/bootstrap.min.css">
     <link rel="stylesheet" href="css/circle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="App_Analyste/css/style.css">
     <title>Analyst</title>
   </head>
+
   <body onload="onload()">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <a class="navbar-brand" href="/">Cloud App</a>
@@ -31,6 +33,7 @@
         </ul>
       </div>
     </nav>
+
     <div class="container">
       <div class="page-header" id="banner">
         <div class="row">
@@ -48,6 +51,14 @@
 						<option disabled selected>Choose origin airport ...</option>
 					</select>
         </div>
+        <div class="col-1" id = "loader">
+          <i class="fa fa-spinner fa-spin" style="font-size:24px; margin-top:35px"></i>
+        </div>
+      </div>
+      <br>
+
+      <div class="progress">
+        <div class="progress-bar bg-success" id="result-progress" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
 
       <br>
@@ -84,14 +95,37 @@
         <div class="col-lg-4 col-md-4 col-sm-4">
           <div class="card border-light mb-3">
             <div class="card-header">Average Delay</div>
-            <div class="card-body" style="height: 305px">
-              <canvas id="myChart" width="500" height="100"></canvas>
+            <div class="card-body" style="height: 280px">
+              <canvas id="myChart"></canvas>
             </div>
           </div>
         </div>
       </div>
-      <div class="row" id = "delay-container">
-
+      <div class="row">
+        <div class="col-6">
+          <table class="table table-hover">
+            <thead>
+              <tr class="table-info">
+                <th scope="col">Company</th>
+                <th scope="col">Number of Departure Flights</th>
+              </tr>
+            </thead>
+            <tbody id="top10Dep">
+            </tbody>
+          </table>
+        </div>
+        <div class="col-6">
+          <table class="table table-hover">
+            <thead>
+              <tr class="table-danger">
+                <th scope="col">Company</th>
+                <th scope="col">Number of Arrival Flights</th>
+              </tr>
+            </thead>
+            <tbody id="top10Arr">
+            </tbody>
+          </table>
+        </div>
       </div>
 
     </div>

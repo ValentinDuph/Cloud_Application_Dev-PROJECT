@@ -3,6 +3,7 @@ var http = require('http');
 var url = require('url');
 var querystring = require('querystring');
 var fct = require('./functions.js'); // Fait appel à functions_lib.js (dans le dossier functions)
+var api = require('./api.js')
 var express = require('express');
 var path = require('path');
 var mongodb = require('mongodb');
@@ -286,6 +287,82 @@ app.get('/db_data', function(req,res) {
           res.setHeader('Content-Type', 'application/json');
           res.send(JSON.stringify(result));
 
+          db.close();
+        });;
+      });
+      break;
+
+    case 'arr10companies':
+      var airport = req.query.airport;
+
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate([
+          {
+      			$match: {
+      			  DEST_CITY_NAME : airport
+      			}
+      		},
+          {
+      			$project: {
+      			    AIRLINE_NAME : 1
+      			}
+      		},
+          {
+      			$group: {
+      			  _id: "$AIRLINE_NAME",
+      			  count : {$sum : 1}
+      			}
+      		},
+          {
+      			$sort: {
+      			  count : -1
+      			}
+      		},
+          {
+      			$limit: 10
+      		}
+      	]).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+          db.close();
+        });;
+      });
+      break;
+
+    case 'dep10companies':
+      var airport = req.query.airport;
+
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(flights_collection).aggregate([
+          {
+      			$match: {
+      			  ORIGIN_CITY_NAME : airport
+      			}
+      		},
+          {
+      			$project: {
+      			    AIRLINE_NAME : 1
+      			}
+      		},
+          {
+      			$group: {
+      			  _id: "$AIRLINE_NAME",
+      			  count : {$sum : 1}
+      			}
+      		},
+          {
+      			$sort: {
+      			  count : -1
+      			}
+      		},
+          {
+      			$limit: 10
+      		}
+      	]).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
           db.close();
         });;
       });
