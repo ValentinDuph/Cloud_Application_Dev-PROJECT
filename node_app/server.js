@@ -94,9 +94,9 @@ app.get('/db_data', function(req,res) {
           },
           {
             $project: {
-              "Airline" : "$AIRLINE_NAME",      //A CHANGER
-              "Flight Number" : "$FL_NUM",
               "Date" : "$FL_DATE",
+              "Airline" : "$CARRIER",
+              "Flight Number" : "$FL_NUM",
               "Departure Time" : "$DEP_TIME",
               "Arrival Time" : "$ARR_TIME",
               "Flight Time" : "$AIR_TIME",

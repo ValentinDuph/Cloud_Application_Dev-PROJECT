@@ -6,23 +6,48 @@ var currentQueryArgument = [];
 //LIKE AIRPORTS AND COMPANIES LIST
 function onload(){
   console.log("loading...");
-  var query_airport = "/db_data?q=airports";
-  d3.json(query_airport, function(json_data) {
-    json_data.forEach(function(doc){
-      airports_list.push(doc[Object.keys(doc)] );
-    });
-  });
-  console.log(airports_list);
 
   var query_company = "/db_data?q=company";
+  var query_airport = "/db_data?q=airports";
   d3.json(query_company, function(json_data) {
     json_data.forEach(function(doc){
       companies_list.push(doc[Object.keys(doc)] );
     });
+    move(80,100);
   });
+
+  d3.json(query_airport, function(json_data) {
+    json_data.forEach(function(doc){
+      airports_list.push(doc[Object.keys(doc)] );
+    });
+    move(5,80);
+  });
+
   console.log(companies_list);
 
+
+
+  console.log(airports_list);
+
   console.log("Loaded!");
+}
+
+function move(from,to) {
+    var bar = document.getElementById("progress")
+    var elem = document.getElementById("result-progress");
+    var width = from;
+    var id = setInterval(frame, 10);
+    function frame() {
+      if(width > 99){
+        bar.style.visibility = 'hidden';
+      }
+      if (width >= to) {
+          clearInterval(id);
+      } else {
+          width++;
+          elem.style.width = width + '%';
+      }
+    }
 }
 
 function querySelect(){

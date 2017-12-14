@@ -20,3 +20,12 @@
 #submitButton{
   margin-top: 40px;
 }
+
+#table_body{
+  cursor: pointer;
+}
+
+.progress{
+  height: 5px;
+  
+}
