@@ -28,14 +28,13 @@ app.use(express.static('www'));
 app.get('/standard', function (req, res) {
   res.sendFile( path.app_standard + "index.html" );
 })
+app.get('/flightInfo', function (req, res) {
+  var flight_id = req.query.id;
+  res.sendFile( path.app_standard + "flightInfo.html", {id:flight_id} );
+})
 app.get('/analyst', function (req, res) {
   res.sendFile( path.app_analyste + "analyst.html" );
 })
-app.get('/flightInfo', function (req, res) {
-  var flight_id = req.query.id;
-  res.sendFile( path.app_analyste + "flightInfo.html" );
-})
-
 app.get('/admin', function (req, res) {
   res.sendFile( path.app_administrateur + "" );
 })
