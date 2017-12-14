@@ -30,7 +30,7 @@ Performance indicators:
 
 
 
-
+```
 db.FLIGHTS.update({},
 {$set: {AIRLINE_NAME: null}},
 {multi: true});
@@ -47,3 +47,4 @@ db.FLIGHTS.find().forEach(function (flightInfo) {
 
 
 WriteResult({ "nMatched" : 1349131, "nUpserted" : 0, "nModified" : 1349131 })
+```
