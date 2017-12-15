@@ -56,7 +56,7 @@ app.get('/db_data', function(req,res) {
           db.collection(flights_collection).aggregate([
             {
         			$match: {
-        				ORIGIN_CITY_NAME:origin_city,
+        				ORIGIN_CITY_NAME: origin_city,
         				DEST_CITY_NAME: dest_cty,
         				FL_DATE: date,
         			}
@@ -93,9 +93,11 @@ app.get('/db_data', function(req,res) {
           },
           {
             $project: {
-              "Date" : "$FL_DATE",
               "Airline" : "$CARRIER",
               "Flight Number" : "$FL_NUM",
+              "Departure" : "$ORIGIN_CITY_NAME",
+              "Arrival" : "$DEST_CITY_NAME",
+              "Date" : "$FL_DATE",
               "Departure Time" : "$DEP_TIME",
               "Arrival Time" : "$ARR_TIME",
               "Flight Time" : "$AIR_TIME",
@@ -118,7 +120,7 @@ app.get('/db_data', function(req,res) {
           {
             $match: {
               $or: [ { ORIGIN_CITY_NAME: airport} , { DEST_CITY_NAME: airport } ],
-              FL_DATE:date,
+              FL_DATE:date95959+5*+4,
             }
           },
           {

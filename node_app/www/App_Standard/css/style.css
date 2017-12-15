@@ -21,15 +21,14 @@
   margin-top: 40px;
 }
 
-<<<<<<< HEAD
 #table_body{
   cursor: pointer;
 }
 
 .progress{
   height: 5px;
-  
-=======
+
+
 /* Timeline */
 .timeline,
 .timeline-horizontal {
@@ -200,5 +199,4 @@
   top: auto;
   bottom: 0px;
   left: 43px;
->>>>>>> 605cdbff953c115a786a68e71540cf1057166a4f
 }

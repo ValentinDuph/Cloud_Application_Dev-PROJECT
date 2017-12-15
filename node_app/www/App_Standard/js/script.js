@@ -34,6 +34,7 @@ function onload(){
 
 function move(from,to) {
     var bar = document.getElementById("progress")
+    bar.style.visibility = 'visible';
     var elem = document.getElementById("result-progress");
     var width = from;
     var id = setInterval(frame, 10);
@@ -78,6 +79,7 @@ function querySelect(){
     var objTo = document.getElementById("selectors");
     if(argument == "date"){
       var newElement = document.createElement('input');
+      newElement.style = "margin-top: 5px;";
       newElement.id = argument;
       newElement.type = "date";
       objTo.appendChild(newElement);
@@ -91,30 +93,11 @@ function querySelect(){
 //CREATE SELECTORS IN FUNCTION OF QUERY
 function generateElementSelect(argument){
   var new_select = document.createElement('select');
+  new_select.style = "margin-top: 5px;";
   new_select.id = argument;
   var new_option = document.createElement('option');
-  // new_option.selected;
-  // new_option.disabled;
   new_option.innerHTML = "Choose the " + argument;
   new_select.appendChild(new_option);
-
-  // if(argument == "departure" || argument == "arrival" || argument == "airport"){
-  //   var query = query_airport;
-  // }
-  // else if(argument == "company"){
-  //   var query = query_company;
-  // }
-  // //var query = "/db_data?q=" + argument;
-  // d3.json(query, function(json_data) {
-  //   //alert(json_data[1][Object.keys(json_data[1])]);
-  //   json_data.forEach(function(doc){
-  //     //alert(doc[Object.keys(doc)]);
-  //     var new_option = document.createElement('option');
-  //     new_option.innerHTML = doc[Object.keys(doc)];
-  //     new_select.appendChild(new_option);
-  //   });
-  // });
-
   var option_List;
   if(argument == "departure" || argument == "arrival" || argument == "airport"){
     option_List = airports_list;
@@ -211,9 +194,11 @@ function query(){
         break;
       default: alert("error");
     }
+    move(5,50);
     console.log(query);
   }
   d3.json(query, function(json_data) {
+    move(50,100);
     json_ToArray(json_data);
   });
 }
