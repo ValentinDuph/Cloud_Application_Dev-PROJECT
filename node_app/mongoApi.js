@@ -67,7 +67,6 @@ exports.getOriginDestination = function(req,res) {
 
 exports.getAvgDelayArr = function(req,res) {
   var airport = req.query.airport;
-
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate([
       {
@@ -103,7 +102,6 @@ exports.getAvgDelayArr = function(req,res) {
 
 exports.getAvgDelayDep = function(req,res) {
   var airport = req.query.airport;
-
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate([
       {
@@ -176,7 +174,6 @@ exports.get10ArrCompanies = function(req,res) {
 
 exports.get10DepCompanies = function (req,res) {
   var airport = req.query.airport;
-
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate([
       {
