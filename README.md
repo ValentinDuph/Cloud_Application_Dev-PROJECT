@@ -36,7 +36,7 @@ mongod
 
 4. Import data into your mongo server. You can easily do that using a Mongo Client :
   * Connect the client to the server
-  * Import data : Right click on your server > "Import..." > "BSON - mongodump folder" > Select the folder located in : Cloud_Application_Dev-PROJECT/data/data_BSON_new"
+  * Import data : Right click on your server > "Import..." > "BSON - mongodump folder" > Select the folder : Cloud_Application_Dev-PROJECT/data/data_BSON_new/"
 
 5. Run Node server
 ```
