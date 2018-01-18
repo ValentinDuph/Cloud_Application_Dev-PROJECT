@@ -383,8 +383,10 @@ exports.get10DepCompanies = function (req,res) {
 }
 
 exports.getLog = function(req,res) {
+  var date;
   var t = req.query.type;
   if(t==undefined) {
+      date = new Date();
       mongoClient.connect(url_db, function(err, db) {
         db.collection(log_collection).find(
         ).sort({date: -1}).toArray(function(err, result) {
@@ -394,7 +396,9 @@ exports.getLog = function(req,res) {
           db.close();
         });
       });
+      insertToLog(req, res, date, "getLog "+t, "ADMINISTRATOR", new Date() - date);
     } else {
+      date = new Date()
       mongoClient.connect(url_db, function(err, db) {
         db.collection(log_collection).aggregate([
           {
@@ -421,5 +425,6 @@ exports.getLog = function(req,res) {
           db.close();
         });
       });
+      insertToLog(req, res, date, "getLog "+t.substring(0,3), "ADMINISTRATOR", new Date() - date);
     }
 }

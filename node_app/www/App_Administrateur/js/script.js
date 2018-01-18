@@ -15,7 +15,7 @@ function getLog() {
       var table = document.getElementById("Standard");
       if(data!="") {
         table.innerHTML = ""
-        for (item of data) table.innerHTML += '<tr><td>' + item._id + '</td><td>' + item.time_avg + ' ms</td></tr>'
+        for (item of data) table.innerHTML += '<tr><td>' + item._id + '</td><td>' + parseFloat(Math.round(item.time_avg * 100) / 100).toFixed(2) + ' ms</td></tr>'
       }
   });
 
@@ -23,7 +23,7 @@ function getLog() {
       var table = document.getElementById("Analyst");
       if(data!="") {
         table.innerHTML = ""
-        for (item of data) table.innerHTML += '<tr><td>' + item._id + '</td><td>' + item.time_avg + ' ms</td></tr>'
+        for (item of data) table.innerHTML += '<tr><td>' + item._id + '</td><td>' + parseFloat(Math.round(item.time_avg * 100) / 100).toFixed(2) + ' ms</td></tr>'
       }
   });
 
@@ -31,7 +31,7 @@ function getLog() {
     var table = document.getElementById("Administrator");
     if(data!="") {
       table.innerHTML = ""
-      for (item of data) table.innerHTML += '<tr><td>' + item._id + '</td><td>' + item.time_avg + ' ms</td></tr>'
+      for (item of data) table.innerHTML += '<tr><td>' + item._id + '</td><td>' + parseFloat(Math.round(item.time_avg * 100) / 100).toFixed(2) + ' ms</td></tr>'
     }
   });
 }
