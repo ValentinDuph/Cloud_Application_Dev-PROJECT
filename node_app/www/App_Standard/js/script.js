@@ -24,11 +24,7 @@ function onload(){
   });
 
   console.log(companies_list);
-
-
-
   console.log(airports_list);
-
   console.log("Loaded!");
 }
 

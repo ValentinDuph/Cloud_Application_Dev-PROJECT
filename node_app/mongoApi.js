@@ -38,8 +38,8 @@ exports.getAll = function(req,res){
 }
 
 exports.getAirports = function(req,res) {
-  var date = new Date();
   // Return list of airports city name
+  var date = new Date();
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate([
       {
@@ -55,7 +55,150 @@ exports.getAirports = function(req,res) {
       db.close();
     });
   });
-  insertToLog(req, res, date, "getAirports", "ANALYST", new Date() - date);
+  insertToLog(req, res, date, "getAirports", "STANDARD+ANALYST", new Date() - date);
+}
+
+exports.getCompany = function(req,res){
+  // Return list of airline companies
+  var date = new Date();
+  mongoClient.connect(url_db, function(err, db) {
+    db.collection(flights_collection).aggregate([
+      {
+        $group:{
+          _id:'$AIRLINE_NAME'
+        }
+      },
+      { $sort : { _id : 1 } }
+    ]).toArray(function(err, result) {
+      if (err) throw err;
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(result));
+      db.close();
+    });
+  });
+  insertToLog(req, res, date, "getCompany", "STANDARD", new Date() - date);
+}
+
+exports.getCompanyFlights = function(req,res){
+  var company = req.query.for;
+  var flight_date = new Date(req.query.on);
+  var date = new Date();
+  mongoClient.connect(url_db, function(err, db) {
+    db.collection(flights_collection).aggregate([
+      {
+        $match: {
+          AIRLINE_NAME:company,
+          FL_DATE:flight_date,
+        }
+      },
+      {
+        $project: {
+          "Airline" : "$CARRIER",
+          "Flight Number" : "$FL_NUM",
+          "Departure" : "$ORIGIN_CITY_NAME",
+          "Arrival" : "$DEST_CITY_NAME",
+          "Date" : "$FL_DATE",
+          "Departure Time" : "$DEP_TIME",
+          "Arrival Time" : "$ARR_TIME",
+          "Flight Time" : "$AIR_TIME",
+        }
+      }
+    ]).toArray(function(err, result) {
+      if (err) throw err;
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(result));
+      db.close();
+    });
+  });
+  insertToLog(req, res, date, "getCompanyFlights", "STANDARD", new Date() - date);
+}
+
+exports.getFlightInfo = function(req,res){
+  var flightNb = req.query.for;
+  var date = new Date();
+  mongoClient.connect(url_db, function(err, db) {
+    db.collection(flights_collection).find({
+        "FL_NUM" : flightNb,
+    }, {
+        "_id" : 0.0,
+        "CARRIER" : 1.0,
+        "FL_NUM" : 1.0,
+        "ORIGIN_CITY_NAME" : 1.0,
+        "DEST_CITY_NAME" : 1.0
+    }).toArray(function(err, result) {
+      if (err) throw err;
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(result));
+      db.close();
+    })
+  });
+  insertToLog(req, res, date, "getFlightInfo", "STANDARD", new Date() - date);
+}
+
+exports.getAirportFlights = function(req,res){
+  var airport = req.query.for;
+  var flight_date = new Date(req.query.on);
+  var date = new Date();
+  mongoClient.connect(url_db, function(err, db) {
+    db.collection(flights_collection).aggregate([
+      {
+        $match: {
+          $or: [ { ORIGIN_CITY_NAME: airport} , { DEST_CITY_NAME: airport } ],
+          FL_DATE:flight_date,
+        }
+      },
+      {
+        $project: {
+          "Airline" : "$AIRLINE_NAME",      //A CHANGER
+          "Flight Number" : "$FL_NUM",
+          "Date" : "$FL_DATE",
+          "Departure Time" : "$DEP_TIME",
+          "Arrival Time" : "$ARR_TIME",
+          "Flight Time" : "$AIR_TIME",
+        }
+      }
+    ]).toArray(function(err, result) {
+      if (err) throw err;
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(result));
+      db.close();
+    });
+  });
+  insertToLog(req, res, date, "getFlightsbyAirports", "STANDARD", new Date() - date);
+}
+
+exports.getJourney = function(req,res){
+  var origin_city = req.query.from;
+  var dest_cty = req.query.to;
+  var flight_date = new Date(req.query.on);
+  var date = new Date();
+  mongoClient.connect(url_db, function(err, db) {
+    db.collection(flights_collection).aggregate([
+      {
+        $match: {
+          ORIGIN_CITY_NAME: origin_city,
+          DEST_CITY_NAME: dest_cty,
+          FL_DATE: flight_date,
+        }
+      },
+      {
+        $project: {
+          "Airline" : "$AIRLINE_NAME",
+          "Flight Number" : "$FL_NUM",
+          "Date" : "$FL_DATE",
+          "Departure Time" : "$DEP_TIME",
+          "Arrival Time" : "$ARR_TIME",
+          "Flight Time" : "$AIR_TIME",
+        }
+      }
+    ]).toArray(function(err, result) {
+      if (err) throw err;
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(result));
+      db.close();
+    });
+  });
+  insertToLog(req, res, date, "getJourney", "STANDARD", new Date() - date);
 }
 
 exports.getOriginDestination = function(req,res) {
