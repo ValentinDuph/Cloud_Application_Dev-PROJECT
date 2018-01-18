@@ -3,8 +3,28 @@ var mongodb = require('mongodb');
 const mongoClient = mongodb.MongoClient;
 const url_db = "mongodb://localhost:27017/Airline";
 const flights_collection = "FLIGHTS"
+const log_collection = "LOG_ADM"
+
+function insertToLog(req, res, date, query, type, time) {
+  var new_log = {
+    "date" : date,
+    "query" : query,
+    "type" : type,
+    "time" : time
+  };
+
+  mongoClient.connect(url_db, function(err, db) {
+    if (err) throw err;
+    db.collection(log_collection).insertOne(new_log, function(err,res) {
+      if(err) throw err;
+      console.log("1 document inserted");
+      db.close();
+    });
+  });
+}
 
 exports.getAll = function(req,res){
+  var date = new Date();
   // Return list of 500 flights
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).find({}).limit(500).toArray(function(err, result) {
@@ -14,9 +34,11 @@ exports.getAll = function(req,res){
       db.close();
     })
   });
+  insertToLog(req, res, date, "getAll", "ANALYST", new Date() - date);
 }
 
 exports.getAirports = function(req,res) {
+  var date = new Date();
   // Return list of airports city name
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate([
@@ -33,13 +55,14 @@ exports.getAirports = function(req,res) {
       db.close();
     });
   });
+  insertToLog(req, res, date, "getAirports", "ANALYST", new Date() - date);
 }
 
 exports.getOriginDestination = function(req,res) {
   var date_from = new Date(req.query.from);
   var date_to = new Date (req.query.to);
   var origin_airport = req.query.o_airport;
-
+  var date = new Date();
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate([
       {
@@ -63,6 +86,7 @@ exports.getOriginDestination = function(req,res) {
       db.close();
     });
   });
+  insertToLog(req, res, date, "getOriginDestination", "STANDARD", new Date() - date);
 }
 
 exports.getAvgDelayArr = function(req,res) {
