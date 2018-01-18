@@ -165,6 +165,7 @@ exports.getAvgDelayDep = function(req,res) {
 
 exports.get10ArrCompanies = function(req,res) {
   var airport = req.query.airport;
+  var date = new Date();
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate([
       {
