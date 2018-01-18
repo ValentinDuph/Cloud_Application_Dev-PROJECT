@@ -206,6 +206,10 @@ app.get('/db_data', function(req,res) {
       api.get10DepCompanies(req,res);
       break;
 
+    case 'getLog':
+      api.getLog(req,res)
+      break;
+
     default:
       break;
   }

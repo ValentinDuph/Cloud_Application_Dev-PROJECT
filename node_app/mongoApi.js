@@ -238,3 +238,17 @@ exports.get10DepCompanies = function (req,res) {
     });
   });
 }
+
+exports.getLog = function(req,res) {
+  var t = req.query.type;
+  mongoClient.connect(url_db, function(err, db) {
+    db.collection(log_collection).find(
+      //{type : t}
+    ).toArray(function(err, result) {
+      if (err) throw err;
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(result));
+      db.close();
+    });
+  });
+}
