@@ -241,14 +241,28 @@ exports.get10DepCompanies = function (req,res) {
 
 exports.getLog = function(req,res) {
   var t = req.query.type;
-  mongoClient.connect(url_db, function(err, db) {
-    db.collection(log_collection).find(
-      //{type : t}
-    ).toArray(function(err, result) {
-      if (err) throw err;
-      res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(result));
-      db.close();
-    });
-  });
+  switch (t) {
+    case undefined:
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(log_collection).find(
+        ).sort({date: -1}).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+          db.close();
+        });
+      });
+      break;
+    default:
+      mongoClient.connect(url_db, function(err, db) {
+        db.collection(log_collection).find(
+          {type : t}
+        ).sort({date: -1}).toArray(function(err, result) {
+          if (err) throw err;
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify(result));
+          db.close();
+        });
+      });
+    }
 }
