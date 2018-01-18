@@ -120,7 +120,7 @@ app.get('/db_data', function(req,res) {
           {
             $match: {
               $or: [ { ORIGIN_CITY_NAME: airport} , { DEST_CITY_NAME: airport } ],
-              FL_DATE:date95959+5*+4,
+              FL_DATE:date,
             }
           },
           {
