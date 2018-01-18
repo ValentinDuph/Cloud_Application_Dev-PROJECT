@@ -11,12 +11,27 @@ function getLog() {
       }
   });
 
-  $.getJSON('db_data?q=getLog&t=STANDARD', function(data) {
+  $.getJSON('db_data?q=getLog&type=STANDARD', function(data) {
       var table = document.getElementById("Standard");
       if(data!="") {
         table.innerHTML = ""
-        for (item of data) user_console.innerHTML += '<tr>' + '</tr>'
-        item.date + ' : ' + ' [' + item.type + '] ' + item.query + " = " + item.time + ' ms <br>';
+        for (item of data) table.innerHTML += '<tr><td>' + item._id + '</td><td>' + item.time_avg + ' ms</td></tr>'
       }
+  });
+
+  $.getJSON('db_data?q=getLog&type=ANALYST', function(data) {
+      var table = document.getElementById("Analyst");
+      if(data!="") {
+        table.innerHTML = ""
+        for (item of data) table.innerHTML += '<tr><td>' + item._id + '</td><td>' + item.time_avg + ' ms</td></tr>'
+      }
+  });
+
+  $.getJSON('db_data?q=getLog&type=ADMINISTRATOR', function(data) {
+    var table = document.getElementById("Administrator");
+    if(data!="") {
+      table.innerHTML = ""
+      for (item of data) table.innerHTML += '<tr><td>' + item._id + '</td><td>' + item.time_avg + ' ms</td></tr>'
+    }
   });
 }

@@ -384,8 +384,7 @@ exports.get10DepCompanies = function (req,res) {
 
 exports.getLog = function(req,res) {
   var t = req.query.type;
-  switch (t) {
-    case undefined:
+  if(t==undefined) {
       mongoClient.connect(url_db, function(err, db) {
         db.collection(log_collection).find(
         ).sort({date: -1}).toArray(function(err, result) {
@@ -395,12 +394,27 @@ exports.getLog = function(req,res) {
           db.close();
         });
       });
-      break;
-    default:
+    } else {
       mongoClient.connect(url_db, function(err, db) {
-        db.collection(log_collection).find(
-          {type : t}
-        ).sort({date: -1}).toArray(function(err, result) {
+        db.collection(log_collection).aggregate([
+          {
+            $match: {
+              type : {$regex : ".*"+t+".*"}
+            }
+          },
+          {
+            $project: {
+              query : 1,
+              time : 1
+            }
+          },
+          {
+            $group: {
+              _id : "$query",
+              "time_avg" : { $avg : "$time"}
+            }
+          }
+        ]).toArray(function(err, result) {
           if (err) throw err;
           res.setHeader('Content-Type', 'application/json');
           res.send(JSON.stringify(result));
