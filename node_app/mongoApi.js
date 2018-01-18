@@ -91,6 +91,7 @@ exports.getOriginDestination = function(req,res) {
 
 exports.getAvgDelayArr = function(req,res) {
   var airport = req.query.airport;
+  var date = new Date();
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate([
       {
@@ -122,10 +123,12 @@ exports.getAvgDelayArr = function(req,res) {
       db.close();
     });
   });
+  insertToLog(req, res, date, "getAvgDelayArr", "ANALYST", new Date() - date);
 }
 
 exports.getAvgDelayDep = function(req,res) {
   var airport = req.query.airport;
+  var date = new Date();
   mongoClient.connect(url_db, function(err, db) {
     db.collection(flights_collection).aggregate([
       {
@@ -157,6 +160,7 @@ exports.getAvgDelayDep = function(req,res) {
       db.close();
     });
   });
+  insertToLog(req, res, date, "getAvgDelayDep", "ANALYST", new Date() - date);
 }
 
 exports.get10ArrCompanies = function(req,res) {
@@ -194,6 +198,7 @@ exports.get10ArrCompanies = function(req,res) {
       db.close();
     });
   });
+  insertToLog(req, res, date, "get10ArrCompanies", "ANALYST", new Date() - date);
 }
 
 exports.get10DepCompanies = function (req,res) {
